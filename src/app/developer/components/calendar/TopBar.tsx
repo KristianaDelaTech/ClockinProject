@@ -23,7 +23,7 @@ export default function TopBar() {
   }, [month, year]);
 
   return (
-    <div className="flex bg-gray-100 items-center border-t border-b sticky h-10">
+    <div className="flex bg-gray-100 items-center border-t border-b sticky h-9">
       {days.map((day) => {
         const weekendClass = isWeekend(year, month, parseInt(day)) ? "bg-gray-300" : "";
         const todayClass = isToday(day) ? "bg-blue-100 text-blue-700 font-extrabold border-blue-500" : "";
@@ -31,7 +31,7 @@ export default function TopBar() {
         return (
           <div
             key={day}
-            className={`border-gray-300 w-10 h-10 flex justify-center items-center border-l font-semibold ${weekendClass} ${todayClass}`}
+            className={`border-gray-300 w-9 h-9 flex justify-center items-center border-l font-semibold ${weekendClass} ${todayClass}`}
           >
             {day}
           </div>

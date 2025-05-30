@@ -12,7 +12,7 @@ export default function SidebarList({ sidebarProjects }: SidebarListProps) {
 
   return (
     <div className="overflow-auto">
-      <div className="h-10 flex justify-center font-semibold text-[#244B77] items-center border-b">Projektet</div>
+      <div className="h-9 flex justify-center font-semibold text-[#244B77] items-center border-b">Projektet</div>
       {sidebarProjects.map(({ company, projects }) => (
         <SidebarItem key={company} company={company} projects={projects} />
       ))}

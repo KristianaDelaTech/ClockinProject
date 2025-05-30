@@ -28,7 +28,7 @@ export default function Calendar() {
         {sidebarProjects.map((companyBlock) => (
           <React.Fragment key={companyBlock.company}>
             {/* Company label row */}
-            <div className="flex items-center h-10 px-2 font-semibold bg-gray-200 border-gray-300"/>
+            <div className="flex items-center h-9 px-2 font-semibold bg-gray-200 border-gray-300"/>
             {/* Project rows */}
             {companyBlock.projects.map((proj: Project) => (
               <div className="flex" key={proj.projectKey}>

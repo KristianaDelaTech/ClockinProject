@@ -10,7 +10,7 @@ export default function Spinner() {
             <img
               src="/loading-gif.gif"
               alt="Loading..."
-              className="mx-auto mb-2 w-10 h-10"
+              className="mx-auto mb-2 w-9 h-9"
             />
             <div className="text-sm text-gray-700">Loading in progress</div>
           </div>
