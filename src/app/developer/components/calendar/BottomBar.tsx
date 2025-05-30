@@ -38,7 +38,7 @@ const pathname = usePathname();
           <div
             key={day}
             title={formattedDate}
-            className={`border-t-5 border-gray-300 w-9 h-6 flex justify-center items-center text-xs pt-1 ${weekendClass} ${bgColor}`}
+            className={`border-t-5 border-gray-300 w-8 h-6 flex justify-center items-center text-xs pt-1 ${weekendClass} ${bgColor}`}
           >
             {totalHours.toFixed(2)}
           </div>
