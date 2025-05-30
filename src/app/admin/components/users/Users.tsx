@@ -141,7 +141,7 @@ export default function Users() {
   if(isLoading) return <Spinner/>
 
   return (
-    <section className="overflow-x-auto rounded-md">
+    <section className="overflow-auto max-h-[500px] 2xl:max-h-[700px] rounded-md pb-10">
       <UserTable
         employees={user?.users || []}
         editingId={editingId}

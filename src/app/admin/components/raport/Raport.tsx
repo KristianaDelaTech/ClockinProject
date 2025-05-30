@@ -29,7 +29,7 @@ export default function Raport() {
     if(isLoading) return <Spinner/>
 
   return (
-    <section className="overflow-x-auto rounded-md">
+    <section className="overflow-auto max-h-[450px]  2xl:max-h-[700px] pb-10 rounded-md">
       <table
         className="w-fit text-[#244B77] border-separate"
         style={{ borderSpacing: "10px" }} // Add spacing between cells

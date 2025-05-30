@@ -117,7 +117,7 @@ export default function Vocations() {
 
   return (
 <section className="rounded-md">
-  <div className="overflow-y-auto max-h-[520px]">
+  <div className="overflow-y-auto max-h-[400px] 2xl:max-h-[520px] pb-10">
     <VocationTable
       vocations={vocations}
       editingId={editingId}
