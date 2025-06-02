@@ -51,7 +51,7 @@ export default async function DashboardLayout({
       <ProjectProvider>
         <CalendarProvider>
           <section
-            className="transition-opacity duration-300 2xl:mx-50 mt-11 min-h-screen w-max"
+            className="transition-opacity duration-300 2xl:mx-50 mt-11 min-h-screen w-auto"
             style={{ fontFamily: "var(--font-anek-bangla)" }}
           >
             <div className="flex justify-between mb-6 items-center">
