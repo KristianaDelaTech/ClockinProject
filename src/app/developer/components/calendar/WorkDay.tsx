@@ -1,46 +1,39 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useWorkHours } from "@/app/context/WorkHoursContext";
 import { useCalendar } from "@/app/context/CalendarContext";
 import { isWeekend } from "@/app/utils/dateUtils";
 import { normalizeProjectKey } from "@/app/utils/normalizeProjectKey";
 import { WorkHoursModal } from "@/app/components/WorkHoursModal";
 import { DayBoxProps } from "@/types/workDay";
-import { useHolidayContext } from "@/app/context/HolidayContext";
-import { isHoliday as checkHoliday } from "@/app/utils/dateUtils";
+import { useDayHoliday } from "@/app/hooks/useDayHoliday";
+import { getDayData } from "@/app/hooks/getDayData";
+import { useSaveWorkHours } from "@/app/hooks/useSaveWorkHours";
 
 export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
   const { year, month } = useCalendar();
   const day = parseInt(date.split("-")[2], 10);
-
-  const [holidays, loading] = useHolidayContext();
-  const isWeekendDay = isWeekend(year, month, day); // ← hook-safe function
+  const isWeekendDay = isWeekend(year, month, day);
 
   const { workHours, setWorkHoursForProject, reloadWorkHours } = useWorkHours();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const normalizedKey = normalizeProjectKey(projectKey);
-  const dayData = workHours[date]?.[userId]?.[normalizedKey] || { hours: 0, note: "" };
-
-  const projectId = parseInt(projectKey.split("-")[1], 10);
-  const isoDate = new Date(`${date}T00:00:00Z`).toISOString();
-
+  const { loading, isHoliday, holidayTitle } = useDayHoliday(year, month, day);
   if (loading) return null;
 
-  const holiday = holidays.find((h) => checkHoliday(year, month, day, h.date));
-  const isHoliday = Boolean(holiday);
-  const holidayTitle = holiday?.title ?? "";
+  const normalizedKey = normalizeProjectKey(projectKey);
+  const dayData = getDayData(workHours, date, userId, normalizedKey);
 
-  const handleSave = async (hours: number, note: string) => {
-    await setWorkHoursForProject(date, userId, projectKey, hours, note);
-    await fetch("/api/workhours", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date: isoDate, hours, note, userId: parseInt(userId, 10), projectId }),
-    });
-    reloadWorkHours(userId, month + 1, year);
-  };
+  const handleSave = useSaveWorkHours({
+    date,
+    userId,
+    projectKey,
+    reloadWorkHours,
+    setWorkHoursForProject,
+    month,
+    year,
+  });
 
   return (
     <>
@@ -67,5 +60,3 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
     </>
   );
 }
-
-

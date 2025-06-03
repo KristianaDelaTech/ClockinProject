@@ -19,7 +19,6 @@ export default function Calendar() {
   const { year, month } = useCalendar();
   const pathname = usePathname();
 
-  // Extract userId from pathname, e.g. "/developer/1"
   const userId = pathname.split("/")[2];
   const daysArray = getDaysInMonth(year, month);
   const { sidebarProjects } = useProjects();

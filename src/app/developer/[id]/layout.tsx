@@ -9,7 +9,9 @@ import { WorkHoursProvider } from "../../context/WorkHoursContext";
 import SidebarHeader from "../components/sidebar/SidebarHeader";
 import SignOutButton from "../components/signoutbutton/SignOutButton";
 import { HolidayProvider } from "@/app/context/HolidayContext";
-
+import { UserRoundPen } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default async function DashboardLayout({
   children,
@@ -44,8 +46,8 @@ export default async function DashboardLayout({
   }
 
   return (
-      <HolidayProvider>
-    <WorkHoursProvider>
+    <HolidayProvider>
+      <WorkHoursProvider>
         <ProjectProvider>
           <CalendarProvider>
             <section
@@ -67,6 +69,13 @@ export default async function DashboardLayout({
                       : "Developer"}
                     )
                   </h4>
+                  {displayedRole?.toLowerCase() === "admin" && (
+                    <Link href="/admin">
+                      <Button size="sm" className="mr-2">
+                        <UserRoundPen />
+                      </Button>
+                    </Link>
+                  )}
                   <SignOutButton />
                 </div>
               </div>
@@ -78,7 +87,7 @@ export default async function DashboardLayout({
             </section>
           </CalendarProvider>
         </ProjectProvider>
-    </WorkHoursProvider>
-      </HolidayProvider>
+      </WorkHoursProvider>
+    </HolidayProvider>
   );
 }
