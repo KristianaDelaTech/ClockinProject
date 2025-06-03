@@ -14,18 +14,9 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
   const { year, month } = useCalendar();
   const day = parseInt(date.split("-")[2], 10);
 
-  // 🔹 Pull holidays from context
   const [holidays, loading] = useHolidayContext();
-  if (loading) return null;
-  // 🔹 Find current day’s holiday
-  const holiday = holidays.find((h) => {
-    return checkHoliday(year, month, day, h.date);
-  });
-  const isHoliday = Boolean(holiday);
-  const holidayTitle = holiday?.title ?? "";
-  console.log("isHoliday", isHoliday, "holiday", holiday);
+  const isWeekendDay = isWeekend(year, month, day); // ← hook-safe function
 
-  const isWeekendDay = isWeekend(year, month, day);
   const { workHours, setWorkHoursForProject, reloadWorkHours } = useWorkHours();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -34,6 +25,13 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
 
   const projectId = parseInt(projectKey.split("-")[1], 10);
   const isoDate = new Date(`${date}T00:00:00Z`).toISOString();
+
+  // 🟢 Safe to return after all hooks have run
+  if (loading) return null;
+
+  const holiday = holidays.find((h) => checkHoliday(year, month, day, h.date));
+  const isHoliday = Boolean(holiday);
+  const holidayTitle = holiday?.title ?? "";
 
   const handleSave = async (hours: number, note: string) => {
     await setWorkHoursForProject(date, userId, projectKey, hours, note);
@@ -70,3 +68,5 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
     </>
   );
 }
+
+
