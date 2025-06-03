@@ -30,11 +30,10 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
 
   // Weekend and holiday checks
   const isWeekendDay = isWeekend(year, month, day);
-  const holiday = holidaysData.find((h) => isHoliday(year, month, day, h.date));
+  const holiday = holidaysData.find((h) => {
+    return  isHoliday(year, month, day, h.date)});
   const isHolidayDay = Boolean(holiday);
   const holidayTitle = holiday?.title ?? "";
- 
-
   const normalizedProjectKey = normalizeProjectKey(projectKey);
   // Work hours from context
   const { workHours, setWorkHoursForProject, reloadWorkHours } = useWorkHours();
@@ -115,8 +114,7 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
         onClick={openModal}
         title={holidayTitle}
         className={`relative w-9 h-9 flex items-center justify-center text-sm cursor-pointer border-r border-b border-gray-300
-          ${isWeekendDay ? "bg-gray-100" : "bg-white hover:bg-gray-100"}
-          ${isHolidayDay ? "bg-green-100" : ""}
+          ${isHolidayDay ? "bg-green-100" : isWeekendDay ? "bg-gray-100" : "bg-white hover:bg-gray-100"}
         `}
       >
         {/* Display hours with 2 decimals if > 0 */}

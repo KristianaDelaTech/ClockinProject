@@ -15,7 +15,7 @@ export const getDaysInMonth = (year: number, month: number): string[] => {
 
 // Parse "DD.MM.YYYY" string into a Date object
 export const parseDateString = (dateString: string): Date => {
-  const [day, month, year] = dateString.split(".");
+  const [month, day, year] = dateString.split("-");
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
 
@@ -23,7 +23,6 @@ export const parseDateString = (dateString: string): Date => {
 export const isHoliday = (year: number, month: number, day: number, holiday: string): boolean => {
   const date = new Date(year, month, day);
   const holidayDate = parseDateString(holiday);
-
   // Compare only year, month, and date — ignore time
   return (
     date.getFullYear() === holidayDate.getFullYear() &&

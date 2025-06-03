@@ -13,25 +13,29 @@ export type HolidayData = {
         title: "Festat e Vitit te Ri"
       },
       {
-        date: "02-01-2025",
+        date: "01-02-2025",
         title: "Festat e Vitit te Ri"
       },
       {
-        date: "14-03-2025",
+        date: "03-14-2025",
         title: "Dita e Verës"
       },
       {
-        date: "22-03-2025",
+        date: "03-22-2025",
         title: "Dita e Nevruzit"
       },
       {
-        date: "30-03-2025",
+        date: "03-30-2025",
         title: "Dita e Bajramit të Madh"
       },
       {
-        date: "20-04-2025",
+        date: "04-20-2025",
         title: "E Diela e Pashkëve Ortodokse"
-      }
+      },
+      {
+        date: "06-06-2025",
+        title: "E Diela e Pashkëve Ortodokse"
+      },
     ]);
   };
   
