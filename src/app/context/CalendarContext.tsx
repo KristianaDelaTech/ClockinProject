@@ -1,7 +1,5 @@
 
 "use client";
-
-// import { resolve } from "path";
 import { createContext, useContext, useState } from "react";
 
 interface CalendarContextProps {
@@ -16,7 +14,7 @@ const CalendarContext = createContext<CalendarContextProps | undefined>(undefine
 
 export const CalendarProvider = ({ children }: { children: React.ReactNode }) => {
   const today = new Date();
-  const [month, setMonth] = useState(today.getMonth()); // 0-11
+  const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
   const [loading, setLoading] = useState(false);
   const simulateLoad = () => new Promise<void>((resolve) => setTimeout(resolve, 1000));

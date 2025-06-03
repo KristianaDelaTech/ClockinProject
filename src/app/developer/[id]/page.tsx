@@ -24,9 +24,6 @@ export default function Developer() {
     reloadWorkHours(userId, month + 1, year);
   }, [userId, month, year, reloadWorkHours]);
 
-  const onSignout = () => {
-    signOut({ callbackUrl: `${window.location.origin}/login` });
-  };
 
   return (
       <section

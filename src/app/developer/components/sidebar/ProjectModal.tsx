@@ -22,7 +22,6 @@ export default function ProjectModal({
   toggleProjectSelection,
   handleSubmit,
 }: ProjectModalProps) {
-  // Create a Set of all existing project keys already in the sidebar
   const sidebarProjectKeys = new Set(
     sidebarProjects.flatMap((group) =>
       group.projects.map((proj) => `${group.company}-${proj.projectKey}`)

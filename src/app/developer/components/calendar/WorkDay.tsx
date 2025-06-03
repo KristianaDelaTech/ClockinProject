@@ -26,7 +26,6 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
   const projectId = parseInt(projectKey.split("-")[1], 10);
   const isoDate = new Date(`${date}T00:00:00Z`).toISOString();
 
-  // 🟢 Safe to return after all hooks have run
   if (loading) return null;
 
   const holiday = holidays.find((h) => checkHoliday(year, month, day, h.date));

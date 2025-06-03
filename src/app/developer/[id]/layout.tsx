@@ -10,10 +10,6 @@ import SidebarHeader from "../components/sidebar/SidebarHeader";
 import SignOutButton from "../components/signoutbutton/SignOutButton";
 import { HolidayProvider } from "@/app/context/HolidayContext";
 
-interface Props {
-  children: React.ReactNode;
-  params: { id: string };
-}
 
 export default async function DashboardLayout({
   children,

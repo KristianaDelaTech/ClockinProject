@@ -1,4 +1,3 @@
-// useFormattedDate.ts
 import { useEffect, useState } from "react";
 
 export const useFormattedDate = (month: number, year: number) => {
