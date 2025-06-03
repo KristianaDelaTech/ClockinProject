@@ -9,7 +9,10 @@ import { Project } from "@/types/project";
 import { usePathname } from "next/navigation";
 
 function formatDate(year: number, month: number, day: string) {
-  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(
+    2,
+    "0"
+  )}`;
 }
 
 export default function Calendar() {
@@ -28,7 +31,7 @@ export default function Calendar() {
         {sidebarProjects.map((companyBlock) => (
           <React.Fragment key={companyBlock.company}>
             {/* Company label row */}
-            <div className="flex items-center h-9 px-2 font-semibold bg-gray-200 border-gray-300"/>
+            <div className="flex items-center h-9 px-2 font-semibold bg-gray-200 border-gray-300" />
             {/* Project rows */}
             {companyBlock.projects.map((proj: Project) => (
               <div className="flex" key={proj.projectKey}>

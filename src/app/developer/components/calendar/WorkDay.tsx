@@ -5,16 +5,27 @@ import { useWorkHours } from "@/app/context/WorkHoursContext";
 import { useCalendar } from "@/app/context/CalendarContext";
 import { isWeekend } from "@/app/utils/dateUtils";
 import { normalizeProjectKey } from "@/app/utils/normalizeProjectKey";
-import { useHolidayInfo } from "@/app/hooks/useHolidayInfo";
 import { WorkHoursModal } from "@/app/components/WorkHoursModal";
 import { DayBoxProps } from "@/types/workDay";
+import { useHolidayContext } from "@/app/context/HolidayContext";
+import { isHoliday as checkHoliday } from "@/app/utils/dateUtils";
 
-export default function WorkDay({ date, projectKey, userId }:DayBoxProps) {
+export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
   const { year, month } = useCalendar();
   const day = parseInt(date.split("-")[2], 10);
-  const { isHoliday, holidayTitle } = useHolidayInfo(year, month, day);
-  const isWeekendDay = isWeekend(year, month, day);
 
+  // 🔹 Pull holidays from context
+  const [holidays, loading] = useHolidayContext();
+  if (loading) return null;
+  // 🔹 Find current day’s holiday
+  const holiday = holidays.find((h) => {
+    return checkHoliday(year, month, day, h.date);
+  });
+  const isHoliday = Boolean(holiday);
+  const holidayTitle = holiday?.title ?? "";
+  console.log("isHoliday", isHoliday, "holiday", holiday);
+
+  const isWeekendDay = isWeekend(year, month, day);
   const { workHours, setWorkHoursForProject, reloadWorkHours } = useWorkHours();
   const [isModalOpen, setIsModalOpen] = useState(false);
 

@@ -29,7 +29,6 @@ export default function Developer() {
   };
 
   return (
-    <>
       <section
         style={{ fontFamily: "var(--font-anek-bangla)" }}
         className="relative flex flex-col justify-between"
@@ -40,6 +39,5 @@ export default function Developer() {
         </div>
         <BottomBar />
       </section>
-    </>
   );
 }

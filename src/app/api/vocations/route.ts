@@ -32,17 +32,47 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const holidays = await db.holidays.findMany({
-      select: {
-        id: true,
-        date: true,
-        holiday: true,
-      },
-    });
+    const { searchParams } = new URL(req.url);
+    const year = searchParams.get("year");
+    const month = searchParams.get("month");
 
-    return NextResponse.json({ holidays }, { status: 200 });
+    let holidays;
+
+    if (year && month) {
+      const start = `${year}-${month.padStart(2, "0")}-01`;
+      const end = new Date(Number(year), Number(month), 0).toISOString().split("T")[0];
+
+      holidays = await db.holidays.findMany({
+        where: {
+          date: {
+            gte: start,
+            lte: end,
+          },
+        },
+        select: {
+          id: true,
+          date: true,
+          holiday: true,
+        },
+      });
+    } else {
+      holidays = await db.holidays.findMany({
+        select: {
+          id: true,
+          date: true,
+          holiday: true,
+        },
+      });
+    }
+
+    const formatted = holidays.map(({ date, holiday }) => ({
+      date,
+      title: holiday,
+    }));
+
+    return NextResponse.json(formatted, { status: 200 });
   } catch (error) {
     console.error("Error fetching holidays:", error);
     return NextResponse.json(
@@ -51,6 +81,7 @@ export async function GET() {
     );
   }
 }
+
 
 export async function DELETE(req: Request) {
   try {
