@@ -12,6 +12,7 @@ import { HolidayProvider } from "@/app/context/HolidayContext";
 import { UserRoundPen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { AbsenceProvider } from "@/app/context/AbsencesContext";
 
 export default async function DashboardLayout({
   children,
@@ -47,6 +48,7 @@ export default async function DashboardLayout({
 
   return (
     <HolidayProvider>
+        <AbsenceProvider>
       <WorkHoursProvider>
         <ProjectProvider>
           <CalendarProvider>
@@ -88,6 +90,7 @@ export default async function DashboardLayout({
           </CalendarProvider>
         </ProjectProvider>
       </WorkHoursProvider>
+      </AbsenceProvider>
     </HolidayProvider>
   );
 }

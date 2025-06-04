@@ -2,7 +2,7 @@
 import { Holiday } from "@/types/holiday";
 import { createContext, useContext, useEffect, useState } from "react";
 
-const HolidayContext = createContext<Holiday[] | null>(null);
+const HolidayContext = createContext<Holiday[] | null | undefined>(undefined);
 
 export const HolidayProvider = ({
   children,
@@ -31,7 +31,12 @@ export const HolidayProvider = ({
 };
 
 export const useHolidayContext = () => {
-    const holidays = useContext(HolidayContext);
-    const loading = holidays === null;
-    return [holidays ?? [], loading] as const;
-  };
+  const holidays = useContext(HolidayContext);
+
+  if (holidays === undefined) {
+    throw new Error("useHolidayContext must be used within a HolidayProvider");
+  }
+
+  const loading = holidays === null;
+  return [holidays ?? [], loading] as const;
+};
