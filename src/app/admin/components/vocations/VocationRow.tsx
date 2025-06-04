@@ -1,7 +1,7 @@
 import { Delete, FilePenLine } from "lucide-react";
 
 type Props = {
-  emp: { id: number; date: string; holiday: string };
+  emp: { id: number; date: string; title: string };
   index: number;
   onEdit: () => void;
   onDelete: () => void;
@@ -14,7 +14,7 @@ export default function VocationRow({ emp, index, onEdit, onDelete }: Props) {
         {index + 1}.
       </td>
       <td className="px-4 py-2 rounded-sm">{emp.date}</td>
-      <td className="px-4 py-2 rounded-sm">{emp.holiday}</td>
+      <td className="px-4 py-2 rounded-sm">{emp.title}</td>
       <td className="px-4 py-2 rounded-sm text-green-800">
         <button onClick={onEdit}>
           <FilePenLine />
