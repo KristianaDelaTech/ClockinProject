@@ -1,0 +1,34 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main  # Or the branch you want to auto-deploy
+
+variables:
+  - group: env-variables  # Contains VERCEL_TOKEN, DATABASE_URL, etc.
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install
+    displayName: 'Install dependencies'
+
+  - script: |
+      npm run build
+    displayName: 'Build Next.js project'
+
+  - script: |
+      npm install -g vercel
+      vercel --prod --token=$VERCEL_TOKEN --confirm --yes
+    displayName: 'Deploy to Vercel'
