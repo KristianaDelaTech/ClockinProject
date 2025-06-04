@@ -28,7 +28,7 @@ export default function Vocations() {
     const emp = vocations.find((v) => v.id === id);
     if (emp) {
       setEditingId(id);
-      setEditedData({ date: emp.date, holiday: emp.holiday });
+      setEditedData({ date: emp.date, holiday: emp.title });
     }
   };
 
