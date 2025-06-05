@@ -11,7 +11,10 @@
   "overrides": {
     "lightningcss": {
       "optionalDependencies": {
-        "lightningcss-linux-x64-gnu": false
+        "lightningcss-linux-x64-gnu": false,
+        "lightningcss-linux-x64-musl": false,
+        "lightningcss-linux-arm64-gnu": false,
+        "lightningcss-linux-arm64-musl": false
       }
     }
   },
