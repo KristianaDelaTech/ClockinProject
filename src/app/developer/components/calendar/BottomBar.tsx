@@ -8,9 +8,11 @@ import { useDayHoliday } from "@/app/hooks/useDayHoliday";
 import { useMemo, useState, useEffect } from "react";
 import { useAbsenceContext } from "@/app/context/AbsencesContext";
 import { useIsAbsentDay } from "@/app/hooks/useIsAbsentDay";
+import { useHolidayContext } from "@/app/context/HolidayContext";
 
 export default function BottomBar() {
   const { month, year } = useCalendar();
+  const [holidays, loading] = useHolidayContext();
   const { getTotalHoursForDay } = useWorkHours();
   const pathname = usePathname();
   const userId = useMemo(() => pathname?.split("/")[2] || "", [pathname]);
@@ -21,7 +23,7 @@ export default function BottomBar() {
     setDays(getDaysInMonth(year, month));
   }, [month, year]);
 
-  if (absenceLoading) return null;
+  if (absenceLoading || loading) return null;
 
   return (
     <div className="flex items-center gap-1">
@@ -30,7 +32,7 @@ export default function BottomBar() {
         const formattedDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
         const totalHours = getTotalHoursForDay(formattedDate, userId);
         const isWeekendDay = isWeekend(year, month, dayNumber);
-        const { isHoliday, holidayTitle } = useDayHoliday(year, month, dayNumber);
+        const { isHoliday, holidayTitle } = useDayHoliday(year, month, dayNumber,holidays);
         const { isAbsentDay, absenceType } = useIsAbsentDay(absences, formattedDate);
 
         let bgColor = totalHours > 0 ? "bg-blue-100" : "bg-white";

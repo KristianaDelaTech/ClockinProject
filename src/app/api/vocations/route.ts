@@ -42,7 +42,9 @@ export async function GET(req: Request) {
 
     if (year && month) {
       const start = `${year}-${month.padStart(2, "0")}-01`;
-      const end = new Date(Number(year), Number(month), 0).toISOString().split("T")[0];
+      const end = new Date(Number(year), Number(month), 0)
+        .toISOString()
+        .split("T")[0];
 
       holidays = await db.holidays.findMany({
         where: {
@@ -67,7 +69,8 @@ export async function GET(req: Request) {
       });
     }
 
-    const formatted = holidays.map(({ date, holiday }) => ({
+    const formatted = holidays.map(({ id, date, holiday }) => ({
+      id,
       date,
       title: holiday,
     }));
@@ -81,7 +84,6 @@ export async function GET(req: Request) {
     );
   }
 }
-
 
 export async function DELETE(req: Request) {
   try {

@@ -12,17 +12,18 @@ import { getDayData } from "@/app/hooks/getDayData";
 import { useSaveWorkHours } from "@/app/hooks/useSaveWorkHours";
 import { useAbsenceContext } from "@/app/context/AbsencesContext";
 import { useIsAbsentDay } from "@/app/hooks/useIsAbsentDay";
+import { useHolidayContext } from "@/app/context/HolidayContext";
 
 export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
   const { year, month } = useCalendar();
+  const [holidays, loading] = useHolidayContext();
   const day = parseInt(date.split("-")[2], 10);
   const isWeekendDay = isWeekend(year, month, day);
   const [absences, absenceLoading] = useAbsenceContext();
   const { workHours, setWorkHoursForProject, reloadWorkHours } = useWorkHours();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { loading, isHoliday, holidayTitle } = useDayHoliday(year, month, day);
-  console.log(date, "date in workday");
+  const { isHoliday, holidayTitle } = useDayHoliday(year, month, day, holidays);
   const { isAbsentDay, absenceType } = useIsAbsentDay(absences, date);
   const normalizedKey = normalizeProjectKey(projectKey);
   const dayData = getDayData(workHours, date, userId, normalizedKey);

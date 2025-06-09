@@ -4,9 +4,11 @@ import { Plus } from "lucide-react";
 import { User } from "@/types/user";
 import Link from "next/link";
 import Spinner from "@/components/ui/Spinner";
+import { useSearchParams } from "next/navigation";
 
 export default function Raport() {
-    const [employee, setEmployee] = useState<{ users: User[] } | null>(null);
+  const searchParams = useSearchParams();
+  const [employee, setEmployee] = useState<{ users: User[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
    useEffect(() => {
       const fetchUser = async () => {
@@ -27,7 +29,7 @@ export default function Raport() {
     }, []);
 
     if(isLoading) return <Spinner/>
-
+  const adminId = searchParams.get("adminId");
   return (
     <section className="overflow-auto max-h-[450px]  2xl:max-h-[700px] pb-10 rounded-md">
       <table
@@ -54,7 +56,7 @@ export default function Raport() {
               <td className="px-4 py-2 rounded-sm">{emp.username}</td>
               <td className="px-4 py-2 rounded-sm">22</td>
               <td className="px-4 py-2 rounded-sm">
-                <Link href={`/developer/${emp.id}`}> 
+                <Link href={`/developer/${emp.id}?adminId=${adminId}`}> 
                 <Button
                   variant="secondary"
                   className="font-semibold w-full justify-start pl-10"

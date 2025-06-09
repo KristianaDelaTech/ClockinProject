@@ -1,35 +1,21 @@
 "use client";
 import { useCalendar } from "@/app/context/CalendarContext";
 import { useWorkHours } from "@/app/context/WorkHoursContext";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Delete } from "lucide-react";
-import { ProjectData } from "@/types/project";
 import { usePathname } from "next/navigation";
+import { useProjects } from "@/app/context/ProjectContext";
 
 export default function TotalBar() {
   const pathname = usePathname();
-
   const userId = pathname.split("/")[2];
-
   const { month, year } = useCalendar();
   const { getTotalHoursForProjectInMonth } = useWorkHours();
-  const [parsedProjects, setParsedProjects] = useState<ProjectData[]>([]);
-
-  const getStorageKey = useCallback(() => {
-    const keyDate = `${year}-${month}`;
-    return `sidebar-projects-${keyDate}`;
-  }, [year, month]);
-
-  useEffect(() => {
-    const key = getStorageKey();
-    const saved = localStorage.getItem(key);
-    const parsed = saved ? (JSON.parse(saved) as ProjectData[]) : [];
-    setParsedProjects(parsed);
-  }, [getStorageKey]);
+  const { sidebarProjects, removeProject } = useProjects();
 
   const sum = useMemo(() => {
     if (!userId) return 0;
-    return parsedProjects.reduce((acc, group) => {
+    return sidebarProjects.reduce((acc, group) => {
       return (
         acc +
         group.projects.reduce((subAcc, proj) => {
@@ -37,22 +23,7 @@ export default function TotalBar() {
         }, 0)
       );
     }, 0);
-  }, [parsedProjects, getTotalHoursForProjectInMonth, month, year, userId]);
-
-  const removeProject = useCallback(
-    (projectKey: string) => {
-      const updatedProjects = parsedProjects
-        .map((group) => ({
-          ...group,
-          projects: group.projects.filter((proj) => proj.projectKey !== projectKey),
-        }))
-        .filter((group) => group.projects.length > 0);
-
-      setParsedProjects(updatedProjects);
-      localStorage.setItem(getStorageKey(), JSON.stringify(updatedProjects));
-    },
-    [parsedProjects, getStorageKey]
-  );
+  }, [sidebarProjects, getTotalHoursForProjectInMonth, month, year, userId]);
 
   if (!userId) {
     return <div className="p-4 text-red-600">User ID not found in URL.</div>;
@@ -64,9 +35,9 @@ export default function TotalBar() {
         <div className="border-gray-300 w-full border h-9 flex justify-center items-center text-black font-semibold">
           Total
         </div>
-        {parsedProjects.map((group) => (
+        {sidebarProjects.map((group) => (
           <div key={group.company} className="w-full project-field">
-            <div className="project-field__name flex items-center w-full h-[36px] font-semibold bg-gray-200 border-b border-gray-300 border-r"/>
+            <div className="project-field__name flex items-center w-full h-[36px] font-semibold bg-gray-200 border-b border-gray-300 border-r" />
             {group.projects.map((proj) => {
               const total = getTotalHoursForProjectInMonth(userId, proj.projectKey, month + 1, year);
               return (

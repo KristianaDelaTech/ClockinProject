@@ -11,7 +11,6 @@ type Props = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>, field: "date" | "holiday") => void;
   onSave: (id: number) => void;
 };
-
 export default function VocationTable({
   vocations,
   editingId,
@@ -33,7 +32,7 @@ export default function VocationTable({
         </tr>
       </thead>
       <tbody>
-        {vocations.map((emp, index) =>
+        {vocations?.map((emp, index) =>
           editingId === emp.id ? (
             <VocationEditRow
               key={emp.id}

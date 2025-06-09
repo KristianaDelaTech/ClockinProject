@@ -1,16 +1,14 @@
-// hooks/useDayHoliday.ts
-import { useHolidayContext } from "@/app/context/HolidayContext";
+
 import { isHoliday as checkHoliday } from "@/app/utils/dateUtils";
+import { Holiday } from "@/types/holiday";
 
-export function useDayHoliday(year: number, month: number, day: number) {
-  const [holidays, loading] = useHolidayContext();
+export function useDayHoliday(year: number, month: number, day: number, holidays: Holiday[]) {
 
-  const holiday = holidays.find((h) =>
+  const holiday = holidays?.find((h) =>
     checkHoliday(year, month, day, h.date)
   );
 
   return {
-    loading,
     isHoliday: Boolean(holiday),
     holidayTitle: holiday?.title ?? "",
   };

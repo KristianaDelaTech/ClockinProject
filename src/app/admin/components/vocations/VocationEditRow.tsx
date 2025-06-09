@@ -9,7 +9,7 @@ type Props = {
 
 export default function VocationEditRow({ index, editedData, onChange, onSave }: Props) {
   return (
-    <tr className="border-t border-[#d1d1d1] font-semibold text-lg bg-[#E3F0FF]">
+    <tr className="border-t border-[#d1d1d1] font-semibold text-lg bg-[#E3F0FF]" key={index}>
       <td className="px-4 py-2 bg-[#244B77] text-white font-semibold rounded-sm text-xl">
         {index + 1}.
       </td>
