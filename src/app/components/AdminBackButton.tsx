@@ -4,7 +4,7 @@
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { UserRoundPen } from "lucide-react";
+import { UserCog } from "lucide-react";
 
 export default function AdminBackButton() {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ export default function AdminBackButton() {
   return (
     <Link href={`/admin/?adminId=${adminId}`}>
       <Button size="sm" className="mr-2">
-        <UserRoundPen />
+        <UserCog />
       </Button>
     </Link>
   );
