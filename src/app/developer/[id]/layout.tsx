@@ -52,7 +52,7 @@ export default async function DashboardLayout({
           <CalendarProvider>
             <ProjectProvider>
               <section
-                className="transition-opacity duration-300 2xl:mx-50 mt-11 min-h-screen w-auto container"
+                className="transition-opacity duration-300 2xl:mx-50 mt-11 min-h-screen w-auto 2xl:container"
                 style={{ fontFamily: "var(--font-anek-bangla)" }}
               >
                 <div className="flex justify-between mb-6 items-center">
@@ -62,7 +62,7 @@ export default async function DashboardLayout({
                   >
                     ClockIn
                   </h2>
-                  <div className="user-name flex items-center">
+                  <div className="user-name flex items-center pr-5 2xl:pr-0">
                     <h4 className="text-[#116B16] font-semibold text-xl mr-10">
                       {displayedUsername} (
                       {displayedRole?.toLowerCase() === "admin"
@@ -71,7 +71,7 @@ export default async function DashboardLayout({
                       )
                     </h4>
                     <AdminBackButton />
-                    <SignOutButton />
+                    <SignOutButton/>
                   </div>
                 </div>
                 <SidebarHeader />
