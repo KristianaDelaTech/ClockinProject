@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AbsenceProvider } from "@/app/context/AbsencesContext";
 import AdminBackButton from "@/app/components/AdminBackButton";
+import ConfirmButton from "../components/calendarActionButtons/ConfirmButton";
+import SaveButton from "../components/calendarActionButtons/SaveButton";
 
 export default async function DashboardLayout({
   children,
@@ -78,7 +80,12 @@ export default async function DashboardLayout({
                 <main className="2xl:w-fit flex">
                   <Sidebar />
                   {children}
+                  
                 </main>
+                  <div  className="flex justify-end items-center gap-4 p-4 mt-5">
+                    <ConfirmButton/>
+                    <SaveButton/>
+                  </div>
               </section>
             </ProjectProvider>
           </CalendarProvider>
