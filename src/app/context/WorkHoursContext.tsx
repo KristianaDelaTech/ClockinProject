@@ -94,7 +94,7 @@ export function WorkHoursProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    fetchWorkHours("1"); // Initial load with default userId "1", adjust as needed
+    fetchWorkHours("1");
   }, [fetchWorkHours]);
 
   const setWorkHoursForProject = async (
@@ -104,7 +104,6 @@ export function WorkHoursProvider({ children }: { children: ReactNode }) {
     hours: number,
     note?: string
   ) => {
-    // Optimistically update local state
     setWorkHours((prev) => ({
       ...prev,
       [date]: {

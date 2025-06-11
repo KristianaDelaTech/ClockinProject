@@ -127,7 +127,7 @@ export default function Vocations() {
 
   if (isLoading) return <Spinner />;
   return (
-    <section className="rounded-md">
+    <section className="rounded-md mb-5">
       <div className="overflow-y-auto max-h-[400px] 2xl:max-h-[520px] pb-10">
         <VocationTable
           vocations={vocations}
@@ -140,7 +140,7 @@ export default function Vocations() {
         />
       </div>
 
-      <div className="flex justify-center mt-20">
+      <div className="flex justify-center my-5 2xl:mt-20">
         <Button onClick={() => setModalOpen(true)}>
           Shto ditë të re pushimi
         </Button>

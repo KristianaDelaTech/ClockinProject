@@ -18,7 +18,6 @@ export const parseDateString = (dateString: string): Date => {
   return new Date(Number(year), Number(month) - 1, Number(day));
 };
 
-// Check if a given day is a holiday
 export const isHoliday = (year: number, month: number, day: number, holiday: string): boolean => {
   const date = new Date(year, month, day);
   const holidayDate = parseDateString(holiday);

@@ -1,4 +1,3 @@
-// app/admin/page.tsx
 import { Suspense } from "react";
 import AdminClient from "./AdminClient";
 import { getSession } from "@/lib/userSession";

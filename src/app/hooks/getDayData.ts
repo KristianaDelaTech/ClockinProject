@@ -1,4 +1,3 @@
-// utils/getDayData.ts
 import { WorkHoursMap, DayWorkEntry } from "@/types/workDay";
 
 export function getDayData(

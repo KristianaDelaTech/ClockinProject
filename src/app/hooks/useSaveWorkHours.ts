@@ -1,6 +1,5 @@
 import { SaveWorkHoursHandler, UseSaveWorkHoursParams } from "@/types/workDay";
 
-// hooks/useSaveWorkHours.ts
 export function useSaveWorkHours({
     date,
     userId,

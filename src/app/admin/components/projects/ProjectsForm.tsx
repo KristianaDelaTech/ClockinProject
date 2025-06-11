@@ -1,4 +1,3 @@
-// components/ProjectsForm.tsx
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { FormData } from "@/types/project";

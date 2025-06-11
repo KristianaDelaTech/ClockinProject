@@ -9,27 +9,10 @@ import { ProjectData, ProjectEntry } from '@/types/project';
 
 export default function Sidebar() {
   const { setSidebarProjects, sidebarProjects } = useProjects();
-  const { month, year } = useCalendar();
 
   const [projectsData, setProjectsData] = useState<ProjectData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
-
-  const getStorageKey = useCallback(() => `sidebar-projects-${year}-${month}`, [year, month]);
-
-  const getStoredProjects = (key: string): ProjectData[] => {
-    try {
-      const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : [];
-    } catch (e) {
-      console.error('Failed to parse localStorage data:', e);
-      return [];
-    }
-  };
-
-  const storeProjects = (key: string, projects: ProjectData[]) => {
-    localStorage.setItem(key, JSON.stringify(projects));
-  };
 
   const groupProjects = (entries: ProjectEntry[]): ProjectData[] => {
     const grouped = entries.reduce((acc, { id, company, project }) => {
@@ -93,10 +76,11 @@ const handleSubmit = () => {
     })
   );
 
-  setSidebarProjects(mergedProjects); // ✅ this will now auto-persist
+  setSidebarProjects(mergedProjects);
   setSelectedProjects([]);
   setIsModalOpen(false);
 };
+
 
 
   return (

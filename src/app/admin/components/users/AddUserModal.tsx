@@ -1,4 +1,3 @@
-// components/users/AddUserModal.tsx
 import { Modal } from "@/app/components/ui/Modal";
 import { Button } from "@/components/ui/button";
 import { InputField } from "@/app/components/ui/InputField";

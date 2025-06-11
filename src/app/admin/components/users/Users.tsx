@@ -152,7 +152,7 @@ export default function Users() {
         onSave={saveChanges}
       />
 
-      <div className="flex justify-center mt-20">
+      <div className="flex justify-center mt-5 2xl:mt-20">
         <Button onClick={() => setOpen(true)}>Shto të ri</Button>
       </div>
 

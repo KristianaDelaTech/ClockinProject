@@ -1,4 +1,3 @@
-// app/admin/layout.tsx or app/dashboard/layout.tsx (wherever you use DashboardLayout)
 import { Suspense } from "react";
 import Sidebar from "./layout/Sidebar";
 import TopNavBar from "./layout/TopNavBar";
@@ -22,7 +21,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         >
           ClockIn
         </h2>
-        <div className="user-name flex items-center">
+        <div className="user-name flex items-center pr-5 2xl:pr-0">
           <h4 className="text-[#116B16] font-semibold text-xl mr-10">
             {session?.user?.username || "User"} (Admin)
           </h4>

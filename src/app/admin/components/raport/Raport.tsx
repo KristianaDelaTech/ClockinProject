@@ -34,7 +34,7 @@ export default function Raport() {
     <section className="overflow-auto max-h-[450px]  2xl:max-h-[700px] pb-10 rounded-md">
       <table
         className="w-fit text-[#244B77] border-separate"
-        style={{ borderSpacing: "10px" }} // Add spacing between cells
+        style={{ borderSpacing: "10px" }}
       >
         <thead className="bg-[#6C99CB] text-white">
           <tr className="text-left">
