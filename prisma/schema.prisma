@@ -25,6 +25,8 @@ model User {
 
   absences   Absence[]
   workHours  WorkHours[]
+
+  SidebarProject SidebarProject[]
 }
 
 
@@ -76,3 +78,16 @@ model WorkHours {
   @@unique([userId, date, projectId])
 }
 
+model SidebarProject {
+  id         String   @id @default(cuid())
+  userId     Int
+  company    String
+  title      String
+  projectKey String
+  month      Int
+  year       Int
+
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, month, year])
+}

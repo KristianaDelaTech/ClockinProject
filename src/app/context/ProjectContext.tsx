@@ -3,9 +3,9 @@ import {
   createContext,
   useContext,
   useState,
+  useEffect,
   ReactNode,
   useCallback,
-  useEffect,
 } from "react";
 import { ProjectData } from "@/types/project";
 import { useCalendar } from "./CalendarContext";
@@ -23,41 +23,44 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   const { month, year } = useCalendar();
   const [sidebarProjects, setSidebarProjectsState] = useState<ProjectData[]>([]);
 
-  const getStorageKey = useCallback(() => `sidebar-projects-${year}-${month}`, [year, month]);
-
-  const loadFromStorage = useCallback(() => {
-    const saved = localStorage.getItem(getStorageKey());
-    const parsed = saved ? (JSON.parse(saved) as ProjectData[]) : [];
-    setSidebarProjectsState(parsed);
-  }, [getStorageKey]);
-
-  const persistToStorage = useCallback((projects: ProjectData[]) => {
-    localStorage.setItem(getStorageKey(), JSON.stringify(projects));
-  }, [getStorageKey]);
-
+  const fetchSidebarProjects = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/sidebarProjects?month=${month}&year=${year}`);
+      if (!res.ok) throw new Error("Failed to load sidebar projects");
+      const data: ProjectData[] = await res.json();
+      setSidebarProjectsState(data);
+    } catch (error) {
+      console.error("Error fetching sidebar projects:", error);
+    }
+  }, [month, year]);
+console.log(sidebarProjects,"sidebarProjects")
   const setSidebarProjects = useCallback((projects: ProjectData[]) => {
     setSidebarProjectsState(projects);
-    persistToStorage(projects);
-  }, [persistToStorage]);
+    fetch("/api/sidebarProjects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ year, month, projects }),
+    }).catch((err) => console.error("Error saving sidebar projects:", err));
+  }, [month, year]);
 
   const removeProject = useCallback((projectKey: string) => {
-    const updatedProjects = sidebarProjects
-      .map((group) => ({
+    const updated = sidebarProjects
+      .map(group => ({
         ...group,
-        projects: group.projects.filter((proj) => proj.projectKey !== projectKey),
+        projects: group.projects.filter(p => p.projectKey !== projectKey),
       }))
-      .filter((group) => group.projects.length > 0);
+      .filter(group => group.projects.length > 0);
 
-    setSidebarProjects(updatedProjects);
+    setSidebarProjects(updated);
   }, [sidebarProjects, setSidebarProjects]);
 
-  const allProjectKeys = sidebarProjects.flatMap((p) =>
-    p.projects.map((proj) => proj.projectKey)
+  const allProjectKeys = sidebarProjects?.flatMap(p =>
+    p.projects?.map(proj => proj.projectKey)
   );
 
   useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    fetchSidebarProjects();
+  }, [fetchSidebarProjects]);
 
   return (
     <ProjectContext.Provider
