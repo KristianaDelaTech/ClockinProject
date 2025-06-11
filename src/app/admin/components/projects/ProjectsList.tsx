@@ -1,4 +1,3 @@
-// components/ProjectList.tsx
 import React from "react";
 import Selector from "@/app/components/Selector";
 

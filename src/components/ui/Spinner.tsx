@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-// components/ui/spinner.tsx
 export default function Spinner() {
     return (
         <div className="inset-0 h-[100%] z-50 flex items-center justify-center bg-white/60">

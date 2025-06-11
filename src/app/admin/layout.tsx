@@ -1,4 +1,3 @@
-// app/admin/layout.tsx or app/dashboard/layout.tsx (wherever you use DashboardLayout)
 import { Suspense } from "react";
 import Sidebar from "./layout/Sidebar";
 import TopNavBar from "./layout/TopNavBar";

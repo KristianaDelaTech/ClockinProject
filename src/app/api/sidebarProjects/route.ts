@@ -94,7 +94,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ message: "projectKey, year, and month are required" }, { status: 400 });
   }
 
-  // Delete the specific project for this user, month, year, and projectKey
   await db.sidebarProject.deleteMany({
     where: {
       userId: Number(userId),

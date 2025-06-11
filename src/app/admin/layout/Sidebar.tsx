@@ -1,4 +1,3 @@
-// Sidebar.tsx
 "use client";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";

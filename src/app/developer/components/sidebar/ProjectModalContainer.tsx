@@ -1,4 +1,3 @@
-// ProjectModalContainer.tsx
 import ProjectModal from "./ProjectModal";
 
 export default function ProjectModalContainer({

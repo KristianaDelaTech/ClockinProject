@@ -1,4 +1,3 @@
-// hooks/useAbsenceForDay.ts
 import { Absence } from "@/app/context/AbsencesContext";
 
 export function useIsAbsentDay(absences: Absence[], date: string): {
