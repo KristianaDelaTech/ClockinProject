@@ -39,11 +39,17 @@ type WorkHoursContextType = {
     month: number,
     year: number
   ) => number;
-  reloadWorkHours: (userId: string, month?: number, year?: number) => Promise<void>;
+  reloadWorkHours: (
+    userId: string,
+    month?: number,
+    year?: number
+  ) => Promise<void>;
   loading: boolean;
 };
 
-const WorkHoursContext = createContext<WorkHoursContextType | undefined>(undefined);
+const WorkHoursContext = createContext<WorkHoursContextType | undefined>(
+  undefined
+);
 
 export function WorkHoursProvider({ children }: { children: ReactNode }) {
   const [workHours, setWorkHours] = useState<WorkHours>({});
@@ -75,7 +81,8 @@ export function WorkHoursProvider({ children }: { children: ReactNode }) {
           const projectKey = `project-${entry.projectId}`;
 
           if (!transformed[dateStr]) transformed[dateStr] = {};
-          if (!transformed[dateStr][userIdStr]) transformed[dateStr][userIdStr] = {};
+          if (!transformed[dateStr][userIdStr])
+            transformed[dateStr][userIdStr] = {};
 
           transformed[dateStr][userIdStr][projectKey] = {
             hours: entry.hours,
@@ -97,24 +104,97 @@ export function WorkHoursProvider({ children }: { children: ReactNode }) {
     fetchWorkHours("1");
   }, [fetchWorkHours]);
 
-  const setWorkHoursForProject = async (
-    date: string,
-    userId: string,
-    projectKey: string,
-    hours: number,
-    note?: string
-  ) => {
+const setWorkHoursForProject = async (
+  date: string,
+  userId: string,
+  projectKey: string,
+  hours: number,
+  note?: string
+) => {
+  const projectId = Number(projectKey.replace(/^PID-/, ""));
+  const normalizedKey = normalizeProjectKey(projectKey);
+  const userData = workHours[date]?.[userId];
+  const entryExists = userData?.[normalizedKey] !== undefined;
+
+  // If setting 0 hours
+  if (hours === 0) {
+    if (!entryExists) {
+      alert("Cannot add 0 hours to an empty cell.");
+      return;
+    }
+
+    // Delete from database
+    try {
+    const res = await fetch(
+  `/api/workhours?date=${encodeURIComponent(date)}&userId=${userId}&projectId=${projectId}`,
+  {
+    method: "DELETE",
+  }
+);
+      if (!res.ok) {
+        console.error("Failed to delete work hours");
+        return;
+      }
+
+      // Remove from local state
+      setWorkHours((prev) => {
+        const updated = { ...prev };
+        delete updated[date][userId][normalizedKey];
+
+        // Clean up empty objects to avoid memory bloat
+        if (Object.keys(updated[date][userId]).length === 0) {
+          delete updated[date][userId];
+        }
+        if (Object.keys(updated[date]).length === 0) {
+          delete updated[date];
+        }
+
+        return updated;
+      });
+    } catch (error) {
+      console.error("Error deleting work hours:", error);
+    }
+    return;
+  }
+
+  // If hours > 0, POST or PUT
+  const payload = {
+    date,
+    userId: Number(userId),
+    projectId,
+    hours,
+    note: note ?? null,
+  };
+
+  const method = entryExists ? "PUT" : "POST";
+
+  try {
+    const res = await fetch("/api/workhours", {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      console.error(`${method} work hours failed`);
+      return;
+    }
+
     setWorkHours((prev) => ({
       ...prev,
       [date]: {
         ...prev[date],
         [userId]: {
           ...prev[date]?.[userId],
-          [projectKey]: { hours, note },
+          [normalizedKey]: { hours, note },
         },
       },
     }));
-  };
+  } catch (error) {
+    console.error("Error saving work hours:", error);
+  }
+};
+
 
   const getTotalHoursForDay = (date: string, userId: string): number => {
     const userData = workHours[date]?.[userId];
@@ -129,7 +209,7 @@ export function WorkHoursProvider({ children }: { children: ReactNode }) {
     year: number
   ): number => {
     let total = 0;
-      const normalizedProjectKey = normalizeProjectKey(projectKey);
+    const normalizedProjectKey = normalizeProjectKey(projectKey);
     for (const [dateStr, users] of Object.entries(workHours)) {
       const date = new Date(dateStr);
       if (date.getMonth() === month - 1 && date.getFullYear() === year) {
