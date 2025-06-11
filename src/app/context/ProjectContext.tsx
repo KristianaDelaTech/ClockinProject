@@ -3,12 +3,13 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
   useCallback,
+  useEffect,
 } from "react";
 import { ProjectData } from "@/types/project";
 import { useCalendar } from "./CalendarContext";
+import { usePathname } from "next/navigation";
 
 type ProjectContextType = {
   sidebarProjects: ProjectData[];
@@ -19,21 +20,28 @@ type ProjectContextType = {
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
+
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
+  const pathname = usePathname();
+  const userId = pathname.split("/")[2];
+
   const { month, year } = useCalendar();
   const [sidebarProjects, setSidebarProjectsState] = useState<ProjectData[]>([]);
 
-  const fetchSidebarProjects = useCallback(async () => {
-    try {
-      const res = await fetch(`/api/sidebarProjects?month=${month}&year=${year}`);
-      if (!res.ok) throw new Error("Failed to load sidebar projects");
-      const data: ProjectData[] = await res.json();
-      setSidebarProjectsState(data);
-    } catch (error) {
-      console.error("Error fetching sidebar projects:", error);
-    }
-  }, [month, year]);
-console.log(sidebarProjects,"sidebarProjects")
+const fetchSidebarProjects = useCallback(async () => {
+  if (!userId) return;
+
+  try {
+    const res = await fetch(`/api/sidebarProjects?userId=${userId}&month=${month}&year=${year}`);
+    if (!res.ok) throw new Error("Failed to load sidebar projects");
+    const data: ProjectData[] = await res.json();
+    setSidebarProjectsState(data);
+  } catch (error) {
+    console.error("Error fetching sidebar projects:", error);
+  }
+}, [userId, month, year]);
+
+
   const setSidebarProjects = useCallback((projects: ProjectData[]) => {
     setSidebarProjectsState(projects);
     fetch("/api/sidebarProjects", {
@@ -58,6 +66,7 @@ console.log(sidebarProjects,"sidebarProjects")
     p.projects?.map(proj => proj.projectKey)
   );
 
+  // 🔁 Refetch when user changes
   useEffect(() => {
     fetchSidebarProjects();
   }, [fetchSidebarProjects]);

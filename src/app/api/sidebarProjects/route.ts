@@ -4,34 +4,26 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  const userId = session.user.id;
   const { searchParams } = new URL(req.url);
   const year = parseInt(searchParams.get("year") || "");
   const month = parseInt(searchParams.get("month") || "");
+  const userId = parseInt(searchParams.get("userId") || "");
 
-  if (isNaN(month) || isNaN(year)) {
-    return NextResponse.json({ message: "Month and year required" }, { status: 400 });
+  if (isNaN(month) || isNaN(year) || isNaN(userId)) {
+    return NextResponse.json({ message: "Month, year, and userId are required" }, { status: 400 });
   }
 
-  // Fetch raw sidebar projects for this user/year/month
   const rawProjects = await db.sidebarProject.findMany({
-    where: { userId: Number(userId), year, month },
+    where: { userId, year, month },
     select: { company: true, title: true, projectKey: true },
   });
 
-  // Group projects by company
   const groupedProjects = rawProjects.reduce((acc, proj) => {
     if (!acc[proj.company]) acc[proj.company] = [];
     acc[proj.company].push({ title: proj.title, projectKey: proj.projectKey });
     return acc;
   }, {} as Record<string, { title: string; projectKey: string }[]>);
 
-  // Convert to array of { company, projects }
   const response = Object.entries(groupedProjects).map(([company, projects]) => ({
     company,
     projects,
@@ -39,6 +31,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(response);
 }
+
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
