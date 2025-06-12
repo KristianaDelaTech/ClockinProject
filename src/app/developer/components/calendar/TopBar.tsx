@@ -37,9 +37,9 @@ export default function TopBar({ hoveredColIndex }: { hoveredColIndex: number | 
         const classList = [
           "border-gray-300 w-9 h-9 flex justify-center items-center border-l font-semibold",
           isWeekend(year, month, day) && "bg-gray-300",
-          isHoliday && "bg-![#f1f7fde7]",
+          isHoliday && "bg-green-100",
           isAbsentDay && "bg-orange-100",
-          hoveredColIndex === colIndex && "bg-blue-100",
+          hoveredColIndex === colIndex && "bg-[#f1f7fde7]",
           today &&
             "bg-blue-100 text-blue-700 font-extrabold border-blue-500"
         ]
