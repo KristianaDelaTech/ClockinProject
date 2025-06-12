@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import TopBar from "./TopBar";
 import WorkDay from "./WorkDay";
 import { useCalendar } from "@/app/context/CalendarContext";
@@ -23,9 +23,12 @@ export default function Calendar() {
   const daysArray = getDaysInMonth(year, month);
   const { sidebarProjects } = useProjects();
 
+  const [hoveredColIndex, setHoveredColIndex] = useState<number | null>(null);
+  const [hoveredProjectKey, setHoveredProjectKey] = useState<string | null>(null);
+
   return (
     <div>
-      <TopBar />
+      <TopBar hoveredColIndex={hoveredColIndex} />
       <div className="flex flex-col bg-gray-100">
         {sidebarProjects.map((companyBlock) => (
           <React.Fragment key={companyBlock.company}>
@@ -34,7 +37,7 @@ export default function Calendar() {
             {/* Project rows */}
             {companyBlock.projects.map((proj: Project) => (
               <div className="flex" key={proj.projectKey}>
-                {daysArray.map((day) => {
+                {daysArray.map((day,dayIndex) => {
                   const date = formatDate(year, month, day);
                   return (
                     <WorkDay
@@ -42,6 +45,11 @@ export default function Calendar() {
                       date={date}
                       projectKey={proj.projectKey}
                       userId={userId}
+                      colIndex={dayIndex}
+                      hoveredColIndex={hoveredColIndex}
+                      hoveredProjectKey={hoveredProjectKey}
+                      setHoveredColIndex={setHoveredColIndex}
+                      setHoveredProjectKey={setHoveredProjectKey}
                     />
                   );
                 })}

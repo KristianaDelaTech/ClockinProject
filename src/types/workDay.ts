@@ -2,6 +2,11 @@ export type DayBoxProps = {
   date: string;
   projectKey: string;
   userId: string;
+  colIndex: number;
+  hoveredColIndex: number | null;
+  hoveredProjectKey: string | null;
+  setHoveredColIndex: (index: number | null) => void;
+  setHoveredProjectKey: (key: string | null) => void;
 };
 export type DayWorkEntry = {
   hours: number;

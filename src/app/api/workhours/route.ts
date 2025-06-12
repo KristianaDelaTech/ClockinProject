@@ -55,8 +55,19 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const entry = await db.workHours.create({
-      data: {
+    const entry = await db.workHours.upsert({
+      where: {
+        userId_date_projectId: {
+          userId,
+          date: new Date(date),
+          projectId,
+        },
+      },
+      update: {
+        hours,
+        note,
+      },
+      create: {
         date: new Date(date),
         hours,
         note,
@@ -64,12 +75,14 @@ export async function POST(req: NextRequest) {
         projectId,
       },
     });
+
     return NextResponse.json(entry, { status: 201 });
   } catch (error) {
-    console.error("Error creating workHours:", error);
-    return NextResponse.json({ error: "Could not create work entry" }, { status: 400 });
+    console.error("Error creating or updating workHours:", error);
+    return NextResponse.json({ error: "Could not create or update work entry" }, { status: 400 });
   }
 }
+
 
 // PUT: Update hours or note for existing entry
 export async function PUT(req: NextRequest) {

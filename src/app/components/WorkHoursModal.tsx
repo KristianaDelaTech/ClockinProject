@@ -10,7 +10,14 @@ type Props = {
   initialNote: string;
 };
 
-export const WorkHoursModal = ({ isOpen, onClose, onSave, initialHours, initialNote }: Props) => {
+
+export const WorkHoursModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  initialHours,
+  initialNote,
+}: Props) => {
   const [inputValue, setInputValue] = useState(initialHours);
   const [textareaValue, setTextAreaValue] = useState(initialNote);
   const [inputError, setInputError] = useState<string | null>(null);
@@ -25,15 +32,21 @@ export const WorkHoursModal = ({ isOpen, onClose, onSave, initialHours, initialN
     onClose();
   }, [inputValue, textareaValue]);
 
+  console.log(inputValue, "df")
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Sheno oret e punes" footer={
       <Button onClick={handleSave} disabled={!!inputError}>Ruaj</Button>
     }>
       <div className="flex flex-col gap-4">
         <input
+          autoFocus
           type="number"
           step={0.25}
           value={inputValue}
+           onFocus={(e) => {
+            e.target.select();
+          }}
           onChange={(e) => {
             setInputValue(e.target.value);
             const val = parseFloat(e.target.value);

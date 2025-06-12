@@ -14,7 +14,16 @@ import { useAbsenceContext } from "@/app/context/AbsencesContext";
 import { useIsAbsentDay } from "@/app/hooks/useIsAbsentDay";
 import { useHolidayContext } from "@/app/context/HolidayContext";
 
-export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
+export default function WorkDay({
+  date,
+  projectKey,
+  userId,
+  colIndex,
+  hoveredColIndex,
+  hoveredProjectKey,
+  setHoveredColIndex,
+  setHoveredProjectKey,
+}: DayBoxProps) {
   const { year, month } = useCalendar();
   const [holidays, loading] = useHolidayContext();
   const day = parseInt(date.split("-")[2], 10);
@@ -44,10 +53,21 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
     : isHoliday
     ? holidayTitle
     : undefined;
+
+  const isHovered = hoveredColIndex === colIndex || hoveredProjectKey === projectKey;
+  
   return (
     <>
       <div
         onClick={() => setIsModalOpen(true)}
+         onMouseEnter={() => {
+          setHoveredColIndex(colIndex);
+          setHoveredProjectKey(projectKey);
+        }}
+        onMouseLeave={() => {
+          setHoveredColIndex(null);
+          setHoveredProjectKey(null);
+        }}
         title={title ?? undefined}
         className={`relative w-9 h-9 flex items-center justify-center text-sm cursor-pointer border-r border-b border-gray-300
     ${
@@ -59,6 +79,7 @@ export default function WorkDay({ date, projectKey, userId }: DayBoxProps) {
         ? "bg-gray-100"
         : "bg-white hover:bg-gray-100"
     }
+    ${ isHovered && !isWeekendDay && !isHoliday && "!bg-gray-100"}
   `}
       >
         {dayData.hours ? Number(dayData.hours).toFixed(2) : ""}
