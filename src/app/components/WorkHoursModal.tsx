@@ -32,7 +32,6 @@ export const WorkHoursModal = ({
     onClose();
   }, [inputValue, textareaValue]);
 
-  console.log(inputValue, "df")
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Sheno oret e punes" footer={

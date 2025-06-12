@@ -132,25 +132,31 @@ const setWorkHoursForProject = async (
   }
 );
       if (!res.ok) {
-        console.error("Failed to delete work hours");
+        console.error("Failed to delete work hours",date, userId, normalizedKey);
         return;
       }
-
       // Remove from local state
       setWorkHours((prev) => {
-        const updated = { ...prev };
-        delete updated[date][userId][normalizedKey];
+  const updated = { ...prev };
 
-        // Clean up empty objects to avoid memory bloat
-        if (Object.keys(updated[date][userId]).length === 0) {
-          delete updated[date][userId];
-        }
-        if (Object.keys(updated[date]).length === 0) {
-          delete updated[date];
-        }
+  if (
+    updated[date] &&
+    updated[date][userId] &&
+    updated[date][userId][normalizedKey]
+  ) {
+    delete updated[date][userId][normalizedKey];
 
-        return updated;
-      });
+    if (Object.keys(updated[date][userId]).length === 0) {
+      delete updated[date][userId];
+    }
+
+    if (Object.keys(updated[date]).length === 0) {
+      delete updated[date];
+    }
+  }
+
+  return updated;
+});
     } catch (error) {
       console.error("Error deleting work hours:", error);
     }
