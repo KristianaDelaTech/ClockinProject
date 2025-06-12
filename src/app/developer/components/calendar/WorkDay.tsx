@@ -79,7 +79,7 @@ export default function WorkDay({
         ? "bg-gray-100"
         : "bg-white hover:bg-gray-100"
     }
-    ${ isHovered && !isWeekendDay && !isHoliday && "!bg-[#ddeaf7e7]"}
+    ${ isHovered && !isWeekendDay && !isHoliday && "!bg-[#f1f7fde7]"}
   `}
       >
         {dayData.hours ? Number(dayData.hours).toFixed(2) : ""}
