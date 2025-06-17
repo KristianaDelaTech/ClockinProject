@@ -23,7 +23,7 @@ export default function WorkDay({
   setHoveredColIndex,
   setHoveredProjectKey,
 }: DayBoxProps) {
-  const { year, month } = useCalendar();
+  const { year, month, refreshPendingStatus } = useCalendar();
   const [holidays, loading] = useHolidayContext();
   const [absences, absenceLoading] = useAbsenceContext();
   const { workHours, setWorkHoursForProject } = useWorkHours();
@@ -50,6 +50,7 @@ export default function WorkDay({
   const handleSave = async (hours: number, note: string) => {
     const data = { hours, note };
     sessionStorage.setItem(localKey, JSON.stringify(data));
+    refreshPendingStatus();
     setIsModalOpen(false);
   };
 
@@ -76,7 +77,7 @@ export default function WorkDay({
         title={title ?? undefined}
         className={`relative w-9 h-9 flex items-center justify-center text-sm cursor-pointer border-r border-b border-gray-300
           ${isHoliday ? "bg-green-100" : isAbsentDay ? "bg-orange-100" : isWeekendDay ? "bg-gray-100" : "bg-white hover:bg-gray-100"}
-          ${isHovered && !isWeekendDay && !isHoliday && "!bg-[#f1f7fde7]"}
+          ${isHovered && !isWeekendDay && !isHoliday && !isAbsentDay && "!bg-[#f1f7fde7]"}
           ${isPending ? " font-bold text-blue-900 border-blue-400" : ""}
         `}
       >
