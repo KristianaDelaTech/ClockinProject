@@ -1,15 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { User } from "@/types/user";
 
 export default function Login() {
   const [data, setData] = useState({ email: "", password: "" });
   const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<{ users: User[] } | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +30,7 @@ export default function Login() {
       const session = await getSession();
 
       const role = session?.user?.role;
-
+       
       if (role?.toLowerCase() === "admin") {
         router.push(`/admin/?adminId=${session?.user?.id}`);
       } else if (role?.toLowerCase() === "dev") {
@@ -37,12 +40,23 @@ export default function Login() {
       }
     }
   };
+ useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch("/api/user", { cache: "no-store" });
+      const data = await res.json();
+      setUser(data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    };
 
+    fetchUser();
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
-
+console.log(user,"useeer")
   return (
     <section className="m-5 sm:m-auto sm:max-w-2/3 lg:max-w-1/3 pt-32">
       <h2 className="text-5xl sm:text-7xl text-[#244B77] text-center">ClockIn</h2>
