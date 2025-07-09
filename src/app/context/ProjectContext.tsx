@@ -16,6 +16,7 @@ type ProjectContextType = {
   setSidebarProjects: (projects: ProjectData[]) => void;
   allProjectKeys: string[];
   removeProject: (projectKey: string) => void;
+  loadingProjects: boolean;
 };
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
@@ -27,19 +28,25 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 
   const { month, year } = useCalendar();
   const [sidebarProjects, setSidebarProjectsState] = useState<ProjectData[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
 
-const fetchSidebarProjects = useCallback(async () => {
-  if (!userId) return;
+  const fetchSidebarProjects = useCallback(async () => {
+    if (!userId) return;
+    setLoadingProjects(true)
 
-  try {
-    const res = await fetch(`/api/sidebarProjects?userId=${userId}&month=${month}&year=${year}`);
-    if (!res.ok) throw new Error("Failed to load sidebar projects");
-    const data: ProjectData[] = await res.json();
-    setSidebarProjectsState(data);
-  } catch (error) {
-    console.error("Error fetching sidebar projects:", error);
-  }
-}, [userId, month, year]);
+    try {
+      const res = await fetch(`/api/sidebarProjects?userId=${userId}&month=${month}&year=${year}`);
+      if (!res.ok) throw new Error("Failed to load sidebar projects");
+      const data: ProjectData[] = await res.json();
+      setSidebarProjectsState(data);
+      setTimeout(() => {
+        setLoadingProjects(false)
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching sidebar projects:", error);
+      setLoadingProjects(false)
+    }
+  }, [userId, month, year]);
 
 
   const setSidebarProjects = useCallback((projects: ProjectData[]) => {
@@ -78,6 +85,7 @@ const fetchSidebarProjects = useCallback(async () => {
         setSidebarProjects,
         allProjectKeys,
         removeProject,
+        loadingProjects
       }}
     >
       {children}
